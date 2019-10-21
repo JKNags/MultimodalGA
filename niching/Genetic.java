@@ -45,6 +45,7 @@ public class Genetic extends Application {
 		populationSize = Integer.parseInt(parameters.getRaw().get(0));
 		mutationRate = Double.parseDouble(parameters.getRaw().get(1));
 		numGenerations = Integer.parseInt(parameters.getRaw().get(2));
+		if (populationSize % 2 != 0) populationSize = populationSize + 1;
 		
 		// Setup GUI
 		primaryStage.setTitle("Line Chart Sample");
@@ -87,13 +88,15 @@ public class Genetic extends Application {
         double[] rouletteWheel;
         Timeline timeline = new Timeline();
         Duration timepoint = Duration.ZERO;
-        Duration pause = Duration.millis(2000);
+        Duration pause = Duration.millis(10);
         Individual parent1, parent2;
         int parent1Idx, parent2Idx;
         double roll;  // stores random variables
-        double value; // Int value of child
+        double value; // Decimal value of child
 		int p1, p2;   // crossover points
-        
+		KeyFrame keyFrame;
+		Data[][] points = new Data[numGenerations][populationSize];
+		
         // Print population
         printPopulation(population);
         printStatistics(population);
@@ -104,13 +107,23 @@ public class Genetic extends Application {
 	        	
 	        	rouletteWheel = getRouletteWheel(population);   // Fill Wheel
 	        	
-	        	pointSeries.getData().clear();
-	        	for (int idx = 0; idx < populationSize; idx++) {
+	        	// Add points to graph
+	        	//timepoint = timepoint.add(pause);
+	        	keyFrame = new KeyFrame(timepoint, e -> pointSeries.getData().clear());
+	        	timeline.getKeyFrames().add(keyFrame);
+	        	
+	        	//getDataPoints(population, points);
+	        	for (int idx = 0; idx < population.length; idx++) {
 	        		Data individualPoint = new XYChart.Data(population[idx].getX(), population[idx].getY());
 	        		Circle point = new Circle(4);
 	        		individualPoint.setNode(point);
-	        		pointSeries.getData().add(individualPoint);
+	        		points[genIdx][idx] = individualPoint;
 	        	}
+	        	//timepoint = timepoint.add(pause);
+	        	Data[] genPoints = points[genIdx];
+	        	keyFrame = new KeyFrame(timepoint, e -> pointSeries.getData().addAll(genPoints));
+	        	timeline.getKeyFrames().add(keyFrame);
+	        	timepoint = timepoint.add(pause);
 	        	
 				// Replace population with children
 				for (int childIdx = 0; childIdx < populationSize; childIdx += 2) {
@@ -195,15 +208,10 @@ public class Genetic extends Application {
 				
 				// Print statistics
 				printStatistics(population);
-				
-	        	//timepoint = timepoint.add(pause);
-	        	//KeyFrame keyFrame;
-	        	//keyFrame = new KeyFrame(timepoint, e -> pointSeries.getData().clear());
-	        	//timeline.getKeyFrames().add(keyFrame);
 	        }
 	
 	        //timeline.setOnFinished(e -> printPopulation(population));
-	        //timeline.play();
+	        timeline.play();
 		} catch (RuntimeException e ) {
 			e.printStackTrace();
 		}
@@ -212,6 +220,16 @@ public class Genetic extends Application {
         Scene scene  = new Scene(lineChart, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void getDataPoints(Individual[] population, Data[] points) {
+    	for (int idx = 0; idx < population.length; idx++) {
+    		Data individualPoint = new XYChart.Data(population[idx].getX(), population[idx].getY());
+    		Circle point = new Circle(4);
+    		individualPoint.setNode(point);
+    		points[idx] = individualPoint;
+    	}
 	}
 	
 	void printStatistics(Individual[] population) {
@@ -223,8 +241,8 @@ public class Genetic extends Application {
 			if (fitness < minFitness) minFitness = fitness;
 			if (fitness > maxFitness) maxFitness = fitness;
 		}
-		
-		System.out.println("Avg Fit (" + (sumFitness / population.length) + "), Min Fit (" + minFitness + "), Max Fitness (" + maxFitness + ")");
+		//System.out.println("Avg Fit (" + (sumFitness / population.length) + "), Min Fit (" + minFitness + "), Max Fitness (" + maxFitness + ")");
+		System.out.println((sumFitness / population.length) + "\t" + minFitness + "\t" + maxFitness);
 	}
 	
 	void printPopulation(Individual[] population) {
