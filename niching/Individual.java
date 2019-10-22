@@ -1,21 +1,29 @@
 package niching;
 
 import java.util.BitSet;
-import java.util.Random;
 
 public class Individual {
-	private BitSet bits;
+	private BitSet xBits;
+	private BitSet yBits;
 	private double x;
 	private double y;
+	private double fitness;
 	
-	public Individual(BitSet _bits, double _x, double _y) {
-		bits = _bits;
+	public Individual(BitSet _xBits, BitSet _yBits, 
+			double _x, double _y, double _fitness) {
+		xBits = _xBits;
+		yBits = _yBits;
 		x = _x;
 		y = _y;
+		fitness= _fitness;
 	}
 	
-	public BitSet getBits() {
-		return bits;
+	public BitSet getXBits() {
+		return xBits;
+	}
+	
+	public BitSet getYBits() {
+		return yBits;
 	}
 	
 	public double getX() {
@@ -26,9 +34,8 @@ public class Individual {
 		return y;
 	}
 	
-	public void update(BitSet _bits, double _x, double _y) {
-		bits = _bits;
-		x = _x;
-		y = _y;
+	public double getFitness() {
+		return fitness;
 	}
+
 }
