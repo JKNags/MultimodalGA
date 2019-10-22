@@ -321,12 +321,12 @@ public class Genetic extends Application {
     	return Math.pow(Math.sin(5 * Math.PI * x), 6);
     }
     
-    double m4(double x) {
+    double m4x(double x) {
     	return Math.pow(Math.E, -2 * Math.log(2) * Math.pow((x - 0.08) / 0.854, 2))
     			* Math.pow(Math.sin(5 * Math.PI * (Math.pow(x, 0.75) - 0.05)), 6);
     }
     
-    double m6(double x, double y) {
+    double m6x(double x, double y) {
     	double sumValue = 0;
     	for (int i = 0; i <= 24; i++) {
     		sumValue += 1 / ( 1 + i + Math.pow(x - 16 *((i % 5) - 2), 6) + Math.pow(y - 16 * (Math.floorDiv(i, 5) - 2), 6) );

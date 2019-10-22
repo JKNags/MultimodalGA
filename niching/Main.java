@@ -5,8 +5,8 @@ import javafx.application.Application;
 public class Main {
 
 	public static void main(String[] args) {
-		int populationSize = 10;
-		float mutationRate = 0.05f;
+		int populationSize = 100;
+		float mutationRate = 0.02f;
 		int numGenerations = 100;
 		
 		Application.launch(Genetic.class, 
