@@ -7,7 +7,8 @@ public class Individual {
 	private BitSet yBits;
 	private double x;
 	private double y;
-	private double fitness;
+	private double actualFitness;
+	private double effectiveFitness;
 	
 	public Individual(BitSet _xBits, BitSet _yBits, 
 			double _x, double _y, double _fitness) {
@@ -15,7 +16,8 @@ public class Individual {
 		yBits = _yBits;
 		x = _x;
 		y = _y;
-		fitness= _fitness;
+		actualFitness= _fitness;
+		effectiveFitness= _fitness;
 	}
 	
 	public BitSet getXBits() {
@@ -34,8 +36,16 @@ public class Individual {
 		return y;
 	}
 	
-	public double getFitness() {
-		return fitness;
+	public double getActualFitness() {
+		return actualFitness;
+	}
+	
+	public double getEffectiveFitness() {
+		return effectiveFitness;
+	}
+	
+	public void setEffectiveFitness(double _effectiveFitness) {
+		effectiveFitness = _effectiveFitness;
 	}
 
 }
